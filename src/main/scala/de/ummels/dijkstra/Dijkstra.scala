@@ -86,20 +86,6 @@ object Dijkstra {
     else None
   }
 
-  /** Merges a collection of streams into a single stream.
-    *
-    * Returns a sorted stream if all input streams are sorted.
-    */
-  def mergeStreams[A](streams: Traversable[Stream[A]])(implicit ord: Ordering[A]): Stream[A] = {
-    val streams1 = streams.toList filterNot (_.isEmpty) sortBy (_.head)
-    if (streams1.isEmpty)
-      Stream.empty
-    else {
-      val first = streams1.head
-      first.head #:: mergeStreams(first.tail :: streams1.tail)
-    }
-  }
-
   def simplePaths1[N](g: Graph[N])(source: N, target: N): Stream[List[N]] = {
     def go(initial: PriorityMap[List[N], Int]): Stream[List[N]] = initial.headOption match {
       case None => Stream.empty
