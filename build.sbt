@@ -8,6 +8,6 @@ scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature")
 
 libraryDependencies += "de.ummels" %% "scala-prioritymap" % "0.3.0"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3" % "test"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.2"
 
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
