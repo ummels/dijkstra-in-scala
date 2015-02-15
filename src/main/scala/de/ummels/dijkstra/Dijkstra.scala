@@ -1,102 +1,28 @@
 package de.ummels.dijkstra
 
-import de.ummels.prioritymap.PriorityMap
+import de.ummels.dijkstra.Util._
 
-import scala.collection.mutable
+/** A trait for Dijkstra's algorithm. */
+trait Dijkstra {
+  /** Runs Dijkstra's algorithm on the given graph from the given source node.
+    *
+    * Returns a map with distances from the source and another map that maps
+    * each node reachable from the source to a predecessor that lies on the
+    * shortest path from the source.
+    *
+    * If a node is reachable from the source, neither of the two returned maps
+    * contains that node as a key.
+    */
+  def dijkstra[N](g: Graph[N])(source: N): (Map[N, Int], Map[N, N])
 
-object Dijkstra {
-  import de.ummels.dijkstra.Graphs.Graph
-
-  def iterateRight[N](x: N)(f: N => Option[N]): List[N] = {
-    def go(x: N, acc: List[N]): List[N] = f(x) match {
-      case None => x :: acc
-      case Some(y) => go(y, x :: acc)
-    }
-
-    go(x, List.empty)
-  }
-
-  def dijkstra1[N](g: Graph[N])(source: N): (Map[N, Int], Map[N, N]) = {
-    val active = mutable.Set(source)
-    val res = mutable.Map(source -> 0)
-    val pred = mutable.Map.empty[N, N]
-    while (active.nonEmpty) {
-      val node = active.minBy(res)
-      active -= node
-      val cost = res(node)
-      for ((n, c) <- g(node)) {
-        val cost1 = cost + c
-        if (cost1 < res.getOrElse(n, Int.MaxValue)) {
-          active += n
-          res += (n -> cost1)
-          pred += (n -> node)
-        }
-      }
-    }
-    (res.toMap, pred.toMap)
-  }
-
-  def shortestPath1[N](g: Graph[N])(source: N, target: N): Option[List[N]] = {
-    val pred = dijkstra1(g)(source)._2
+  /** Optionally computes a shortest path between two given nodes in a graph.
+    *
+    * Returns a `Some` with a shortest path from `source` to `target` if `target`
+    * is reachable from `source`; returns `None` otherwise.
+    */
+  def shortestPath[N](g: Graph[N])(source: N, target: N): Option[List[N]] = {
+    val pred = dijkstra(g)(source)._2
     if (pred.contains(target) || source == target) Some(iterateRight(target)(pred.get))
     else None
-  }
-
-  def dijkstra2[N](g: Graph[N])(source: N): (Map[N, Int], Map[N, N]) = {
-    def go(active: Set[N], res: Map[N, Int], pred: Map[N, N]): (Map[N, Int], Map[N, N]) =
-      if (active.isEmpty) (res, pred)
-      else {
-        val node = active.minBy(res)
-        val cost = res(node)
-        val neighbours = for {
-          (n, c) <- g(node) if cost + c < res.getOrElse(n, Int.MaxValue)
-        } yield n -> (cost + c)
-        val preds = neighbours mapValues (_ => node)
-        go(active - node ++ neighbours.keys, res ++ neighbours, pred ++ preds)
-      }
-
-    go(Set(source), Map(source -> 0), Map.empty)
-  }
-
-  def shortestPath2[N](g: Graph[N])(source: N, target: N): Option[List[N]] = {
-    val pred = dijkstra2(g)(source)._2
-    if (pred.contains(target) || source == target) Some(iterateRight(target)(pred.get))
-    else None
-  }
-
-  def dijkstra3[N](g: Graph[N])(source: N): (Map[N, Int], Map[N, N]) = {
-    def go(active: PriorityMap[N, Int], acc: Map[N, Int], pred: Map[N, N]):
-    (Map[N, Int], Map[N, N]) =
-      if (active.isEmpty) (acc, pred)
-      else {
-        val (node, cost) = active.head
-        val neighbours = for {
-          (n, c) <- g(node) if !acc.contains(n) && cost + c < active.getOrElse(n, Int.MaxValue)
-        } yield n -> (cost + c)
-        val preds = neighbours mapValues (_ => node)
-        go(active.tail ++ neighbours, acc + (node -> cost), pred ++ preds)
-      }
-
-    go(PriorityMap(source -> 0), Map.empty, Map.empty)
-  }
-
-  def shortestPath3[N](g: Graph[N])(source: N, target: N): Option[List[N]] = {
-    val pred = dijkstra3(g)(source)._2
-    if (pred.contains(target) || source == target) Some(iterateRight(target)(pred.get))
-    else None
-  }
-
-  def simplePaths1[N](g: Graph[N])(source: N, target: N): Stream[List[N]] = {
-    def go(initial: PriorityMap[List[N], Int]): Stream[List[N]] = initial.headOption match {
-      case None => Stream.empty
-      case Some((p, _)) if p.head == target => p #:: go(initial.tail)
-      case Some((p, c)) =>
-        val neighbours = for {
-          (n, cost) <- g(p.head) if !p.contains(n)
-        } yield (n :: p, c + cost)
-        go(initial.tail ++ neighbours)
-    }
-
-    go(PriorityMap(List(source) -> 0)) map (_.reverse)
   }
 }
