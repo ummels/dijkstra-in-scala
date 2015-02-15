@@ -3,9 +3,7 @@ package de.ummels.dijkstra
 /** Simple implementation of graphs using a map. */
 case class SimpleGraph[N](succs: Map[N, Map[N, Int]]) extends Graph[N] {
   def apply(n: N) = succs.getOrElse(n, Map.empty)
-
-  def nodes: Set[N] = succs.keySet
-
+  
   def reversed: SimpleGraph[N] = {
     val edges = for {
       (n, nbs) <- succs.toSeq
