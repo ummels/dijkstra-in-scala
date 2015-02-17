@@ -1,22 +1,22 @@
 package de.ummels.dijkstra
 
-trait DijkstraSpec extends PropertySpec {
+trait DijkstraSpec extends PropertySpec with Dijkstra.ToDijkstraOps {
 
   import DijkstraSpec._
 
-  val D: Dijkstra
+  implicit val dijkstraInstance: Dijkstra
 
   property("the result of dijkstra should contain all nodes reachable from source") {
     forAll(inputs) { case (graph, source, _) =>
       val reach = graph.bfs(source)
-      D.dijkstra(graph)(source)._1.keys shouldBe reach
+      graph.dijkstra(source)._1.keys shouldBe reach
     }
   }
 
   property("the result of dijkstra should be consistent") {
     forAll(inputs) { case (graph, source, _) =>
       val test = (isConsistent(graph)(source) _).tupled
-      test(D.dijkstra(graph)(source)) shouldBe true
+      test(graph.dijkstra(source)) shouldBe true
     }
   }
 }

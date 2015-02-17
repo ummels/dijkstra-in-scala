@@ -1,14 +1,14 @@
 package de.ummels.dijkstra
 
-trait PathFinderSpec extends PropertySpec {
+trait PathFinderSpec extends PropertySpec with PathFinder.ToPathFinderOps {
 
   import PathFinderSpec._
 
-  val P: PathFinder
+  implicit val pf: PathFinder
 
   property("simplePaths should return a non-empty stream of simple paths if and only if target is reachable from source") {
     forAll(inputs) { case (graph, source, target) =>
-      val ps = P.simplePaths(graph)(source, target).take(50) // cutoff at 50 paths
+      val ps = graph.simplePaths(source, target).take(50) // cutoff at 50 paths
       if (graph.isReachable(source, target)) {
         ps should not be empty
         ps.forall(isPath(graph)(_, source, target)) shouldBe true
@@ -20,7 +20,7 @@ trait PathFinderSpec extends PropertySpec {
 
   property("simplePaths should return a stream of distinct paths, sorted by cost") {
     forAll(inputs) { case (graph, source, target) =>
-      val ps = P.simplePaths(graph)(source, target).take(50) // cutoff at 50 paths
+      val ps = graph.simplePaths(source, target).take(50) // cutoff at 50 paths
       ps map (_.distinct) shouldBe ps
       val costs = ps map cost(graph)
       costs shouldBe costs.sorted
@@ -46,7 +46,7 @@ trait PathFinderSpec extends PropertySpec {
       (1, 2, 3))
 
     forAll(table) { (source, target, count) =>
-      P.simplePaths(graph)(source, target) should have length count
+      graph.simplePaths(source, target) should have length count
     }
   }
 }
