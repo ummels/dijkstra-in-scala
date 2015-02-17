@@ -32,33 +32,23 @@ trait Dijkstra {
 /** Companion object for the Dijkstra trait.
   *
   * Defines an implicit conversion which can be used to call `dijkstra` and
-  * `shortestPath` as methods on `Graph` instance.
+  * `shortestPath` as methods on `Graph` instances.
   *
-  * To enable the implicit conversio, you can either mix in the trait
+  * To enable the implicit conversion, you can either mix in the trait
   * `ToDijkstraOps` or import the member `toDijkstraOps`.
   */
 object Dijkstra {
-  trait Ops[N] {
-    def self: Graph[N]
-
-    def dijkstraInstance: Dijkstra
-
+  case class Ops[N](graph: Graph[N], instance: Dijkstra) {
     def dijkstra(source: N): (Map[N, Int], Map[N, N]) =
-      dijkstraInstance.dijkstra(self)(source)
+      instance.dijkstra(graph)(source)
 
     def shortestPath(source: N, target: N): Option[List[N]] =
-      dijkstraInstance.shortestPath(self)(source, target)
+      instance.shortestPath(graph)(source, target)
   }
 
   trait ToDijkstraOps {
-    implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = new Ops[N] {
-      def self = graph
-      def dijkstraInstance = d
-    }
+    implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = Ops(graph, d)
   }
 
-  implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = new Ops[N] {
-    def self = graph
-    def dijkstraInstance = d
-  }
+  implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = Ops(graph, d)
 }
