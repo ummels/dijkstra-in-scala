@@ -1,6 +1,6 @@
 package de.ummels.dijkstra
 
-trait PathFinderSpec extends PropertySpec with PathFinder.ToPathFinderOps {
+trait PathFinderSpec extends PropertySpec with PathFinder.Syntax {
 
   import PathFinderSpec._
 

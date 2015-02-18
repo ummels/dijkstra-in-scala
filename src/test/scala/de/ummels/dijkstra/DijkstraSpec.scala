@@ -1,6 +1,6 @@
 package de.ummels.dijkstra
 
-trait DijkstraSpec extends PropertySpec with Dijkstra.ToDijkstraOps {
+trait DijkstraSpec extends PropertySpec with Dijkstra.Syntax {
 
   import DijkstraSpec._
 

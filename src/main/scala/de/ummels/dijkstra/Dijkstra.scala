@@ -35,10 +35,10 @@ trait Dijkstra {
   * `shortestPath` as methods on `Graph` instances.
   *
   * To enable the implicit conversion, you can either mix in the trait
-  * `ToDijkstraOps` or import the member `toDijkstraOps`.
+  * `Dijkstra.Syntax` or import `Dijkstra.syntax._`.
   */
 object Dijkstra {
-  case class Ops[N](graph: Graph[N], instance: Dijkstra) {
+  case class DijkstraOps[N](graph: Graph[N], instance: Dijkstra) {
     def dijkstra(source: N): (Map[N, Int], Map[N, N]) =
       instance.dijkstra(graph)(source)
 
@@ -46,9 +46,10 @@ object Dijkstra {
       instance.shortestPath(graph)(source, target)
   }
 
-  trait ToDijkstraOps {
-    implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = Ops(graph, d)
+  trait Syntax {
+    implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): DijkstraOps[N] =
+      DijkstraOps(graph, d)
   }
 
-  implicit def toDijkstraOps[N](graph: Graph[N])(implicit d: Dijkstra): Ops[N] = Ops(graph, d)
+  object syntax extends Syntax
 }

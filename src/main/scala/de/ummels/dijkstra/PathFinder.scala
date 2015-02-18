@@ -16,17 +16,18 @@ trait PathFinder {
   * as a method on `Graph` instances.
   *
   * To enable the implicit conversion, you can either mix in the trait
-  * `ToPathFinderOps` or import the member `toPathFinderOps`.
+  * `PathFinder.Syntax` or import `PathFinder.syntax._`.
   */
 object PathFinder {
-  case class Ops[N](graph: Graph[N], instance: PathFinder) {
+  case class PathFinderOps[N](graph: Graph[N], instance: PathFinder) {
     def simplePaths(source: N, target: N): Stream[List[N]] =
       instance.simplePaths(graph)(source, target)
   }
 
-  trait ToPathFinderOps {
-    implicit def toPathFinderOps[N](graph: Graph[N])(implicit pf: PathFinder): Ops[N] = Ops(graph, pf)
+  trait Syntax {
+    implicit def toPathFinderOps[N](graph: Graph[N])(implicit pf: PathFinder): PathFinderOps[N] =
+      PathFinderOps(graph, pf)
   }
 
-  implicit def toPathFinderOps[N](graph: Graph[N])(implicit pf: PathFinder): Ops[N] = Ops(graph, pf)
+  object syntax extends Syntax
 }
