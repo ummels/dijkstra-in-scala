@@ -12,7 +12,7 @@ trait Dijkstra {
     * each node reachable from the source to a predecessor that lies on the
     * shortest path from the source.
     *
-    * If a node is reachable from the source, neither of the two returned maps
+    * If a node is unreachable from the source, neither of the two returned maps
     * contains that node as a key.
     */
   def dijkstra[N](g: Graph[N])(source: N): (Map[N, Int], Map[N, N])
