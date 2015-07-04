@@ -22,7 +22,7 @@ object Util {
     *
     * Returns a sorted stream if all input streams are sorted.
     */
-  def mergeStreams[A](streams: Traversable[Stream[A]])(implicit ord: Ordering[A]): Stream[A] = {
+  def mergeStreams[A : Ordering](streams: Traversable[Stream[A]]): Stream[A] = {
     val streams1 = streams.toList filterNot (_.isEmpty) sortBy (_.head)
     if (streams1.isEmpty)
       Stream.empty
@@ -31,4 +31,11 @@ object Util {
       first.head #:: mergeStreams(first.tail :: streams1.tail)
     }
   }
+
+  /** Merges several streams into a single stream.
+    *
+    * Returns a sorted stream if all input streams are sorted.
+    */
+  def mergeStreams[A : Ordering](streams: Stream[A]*): Stream[A] =
+    mergeStreams(streams)
 }
