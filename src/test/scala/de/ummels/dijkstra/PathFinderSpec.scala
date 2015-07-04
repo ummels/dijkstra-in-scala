@@ -21,7 +21,7 @@ trait PathFinderSpec extends PropertySpec with PathFinder.Syntax {
   property("simplePaths should return a stream of distinct paths, sorted by cost") {
     forAll(inputs) { case (graph, source, target) =>
       val ps = graph.simplePaths(source, target).take(50) // cutoff at 50 paths
-      ps map (_.distinct) shouldBe ps
+      ps.distinct shouldBe ps
       val costs = ps map cost(graph)
       costs shouldBe costs.sorted
     }
