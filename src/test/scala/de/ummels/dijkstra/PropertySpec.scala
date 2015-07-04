@@ -12,12 +12,14 @@ trait PropertySpec extends PropSpec with prop.PropertyChecks with Matchers {
     genGraph.map(g => SimpleGraph(g))
   }
 
-  val inputs: Gen[(SimpleGraph[Int], Int, Int)] = Gen.sized { size =>
+  val graphs: Gen[SimpleGraph[Int]] = Gen.sized { size =>
     val n = math.sqrt(size).toInt max 1
-    for {
-      g <- genGraph(0 until n)
-      source <- Gen.choose(0, n - 1)
-      target <- Gen.choose(0, n - 1)
-    } yield (g, source, target)
+    genGraph(0 until n)
   }
+
+  val inputs: Gen[(SimpleGraph[Int], Int, Int)] = for {
+    g <- graphs
+    source <- Gen.oneOf(g.nodes.toSeq)
+    target <- Gen.oneOf(g.nodes.toSeq)
+  } yield (g, source, target)
 }
