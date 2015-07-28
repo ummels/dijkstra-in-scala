@@ -20,4 +20,6 @@ object PathFinderPriority extends PathFinder {
 
     go(PriorityMap(List(source) -> 0)) map (_.reverse)
   }
+
+  override def toString = "PathFinderPriority"
 }

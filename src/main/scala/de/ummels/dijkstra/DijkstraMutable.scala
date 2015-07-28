@@ -23,4 +23,6 @@ object DijkstraMutable extends Dijkstra {
     }
     (res.toMap, pred.toMap)
   }
+
+  override def toString = "DijkstraMutable"
 }

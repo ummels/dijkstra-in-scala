@@ -33,4 +33,6 @@ object PathFinderDijkstra extends PathFinder {
 
     go(g)(target) map { case (p, _) => p.reverse }
   }
+
+  override def toString = "PathFinderDijkstra"
 }

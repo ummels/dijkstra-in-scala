@@ -19,4 +19,6 @@ object DijkstraPriority extends Dijkstra {
 
     go(PriorityMap(source -> 0), Map.empty, Map.empty)
   }
+
+  override def toString = "DijkstraPriority"
 }

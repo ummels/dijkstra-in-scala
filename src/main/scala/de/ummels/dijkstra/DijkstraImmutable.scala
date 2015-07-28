@@ -17,4 +17,6 @@ object DijkstraImmutable extends Dijkstra {
 
     go(Set(source), Map(source -> 0), Map.empty)
   }
+
+  override def toString = "DijkstraImmutable"
 }
