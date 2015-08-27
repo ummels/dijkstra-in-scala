@@ -10,6 +10,6 @@ libraryDependencies += "de.ummels" %% "scala-prioritymap" % "0.3.0"
 
 libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.4"
 
-libraryDependencies += "com.storm-enroute" %% "scalameter" % "0.6"
+libraryDependencies += "com.storm-enroute" %% "scalameter-core" % "0.7"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.5" % "test"

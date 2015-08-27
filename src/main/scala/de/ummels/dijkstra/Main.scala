@@ -13,6 +13,6 @@ object Main extends App {
     val time = measure {
       dijkstra.dijkstra(g)(0)
     }
-    println(s"Total time: ${time.toInt} ms")
+    println(s"Total time: $time")
   }
 }
