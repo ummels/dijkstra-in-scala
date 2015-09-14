@@ -8,7 +8,7 @@ scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature")
 
 libraryDependencies += "de.ummels" %% "scala-prioritymap" % "0.3.0"
 
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.4"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.5"
 
 libraryDependencies += "com.storm-enroute" %% "scalameter-core" % "0.7"
 
