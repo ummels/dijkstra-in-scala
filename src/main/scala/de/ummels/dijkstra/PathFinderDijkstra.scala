@@ -10,9 +10,9 @@ object PathFinderDijkstra extends PathFinder {
 
     val dijkstra = (g: Graph[N]) => DijkstraPriority.dijkstra(g)(source)
 
-    /** Returns a sorted stream of "backward paths" in `g` starting in `n`
-      * and ending in `source`, together with their price.
-      */
+    /* Returns a sorted stream of "backward paths" in `g` starting in `n`
+     * and ending in `source`, together with their price.
+     */
     def go(g: Graph[N])(n: N): Stream[(List[N], Int)] = {
       def prepend(suffix: (List[N], Int)): (List[N], Int) = suffix match {
         case (p, c) => (n :: p, c + g(p.head)(n))
