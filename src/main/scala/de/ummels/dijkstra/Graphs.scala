@@ -3,19 +3,15 @@ package de.ummels.dijkstra
 import org.scalacheck.Gen
 
 object Graphs {
-  def chain(size: Int): Graph[Int] = new Graph[Int] {
-    def apply(x: Int) = x match {
-      case n if n >= 0 && n < size => Map((n + 1) -> 1, (n + 2) -> 3, (n - 1) -> 1)
-      case _ => Map.empty
-    }
+  def chain(size: Int): Graph[Int] = (x: Int) => x match {
+    case n if n >= 0 && n < size => Map((n + 1) -> 1, (n + 2) -> 3, (n - 1) -> 1)
+    case _ => Map.empty
   }
 
-  def tree(depth: Int): Graph[List[Boolean]] = new Graph[List[Boolean]] {
-    def apply(x: List[Boolean]) = x match {
-      case l if l.length < depth => Map((true :: l) -> 1, (false :: l) -> 2)
-      case l if l.length == depth => Map(Nil -> 1)
-      case _ => Map.empty
-    }
+  def tree(depth: Int): Graph[List[Boolean]] = (x: List[Boolean]) => x match {
+    case l if l.length < depth => Map((true :: l) -> 1, (false :: l) -> 2)
+    case l if l.length == depth => Map(Nil -> 1)
+    case _ => Map.empty
   }
 
   def randomGraph(nodes: Int, outDegree: Int, maxCost: Int): SimpleGraph[Int] = {
