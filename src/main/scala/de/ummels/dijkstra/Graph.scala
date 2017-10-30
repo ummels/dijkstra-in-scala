@@ -8,12 +8,10 @@ trait Graph[N] { self =>
   def apply(n: N): Map[N, Int]
 
   /** Returns a new graph with the given node `n` removed. */
-  def -(n1: N): Graph[N] = (n: N) => if (n == n1) Map.empty
-  else self(n) - n1
+  def -(n1: N): Graph[N] = (n: N) => if (n == n1) Map.empty else self(n) - n1
 
   /** Returns a new graph with the edge from `n1` to `n2` removed. */
-  def -(n1: N, n2: N): Graph[N] = (n: N) => if (n == n1) self(n) - n2
-  else self(n)
+  def -(n1: N, n2: N): Graph[N] = (n: N) => if (n == n1) self(n) - n2 else self(n)
 
   /** Performs a breadth-first search on this graph.
     *
