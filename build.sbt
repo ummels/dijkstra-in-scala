@@ -2,7 +2,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "dijkstra",
     version := "1.0-SNAPSHOT",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     scalacOptions ++= Seq("-Xlint", "-unchecked", "-deprecation", "-feature"),
     autoAPIMappings := true,
     libraryDependencies += "de.ummels" %% "scala-prioritymap" % "1.0.0",
